@@ -10,13 +10,18 @@ neoForge {
     if (at.exists()) {
         accessTransformers.from(at.absolutePath)
     }
+    parchment {
+        minecraftVersion = parchment_minecraft
+        mappingsVersion = parchment_version
+    }
+
 }
 
 dependencies {
     compileOnly('net.fabricmc:sponge-mixin:0.17.3+mixin.0.8.7')
     compileOnly(annotationProcessor('io.github.llamalad7:mixinextras-common:0.5.3'))
 
-    compileOnly "eu.pb4:trinkets:${trinkets_version}"
+    compileOnly("io.wispforest:accessories-common:${accessories_version}-mojmap")
 }
 
 configurations {

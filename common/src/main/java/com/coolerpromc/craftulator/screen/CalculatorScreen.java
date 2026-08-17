@@ -5,20 +5,16 @@ import com.coolerpromc.craftulator.platform.util.RegistryHandler;
 import com.coolerpromc.craftulator.sound.ModSounds;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
-import net.minecraft.client.gui.GuiGraphicsExtractor;
-import net.minecraft.client.gui.components.AbstractButton;
+import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.Tooltip;
 import net.minecraft.client.gui.narration.NarrationElementOutput;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.client.input.CharacterEvent;
-import net.minecraft.client.input.InputWithModifiers;
-import net.minecraft.client.input.KeyEvent;
-import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.client.resources.sounds.SoundInstance;
 import net.minecraft.client.sounds.SoundManager;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.FormattedCharSequence;
 import org.lwjgl.glfw.GLFW;
 
@@ -26,7 +22,7 @@ import java.math.BigDecimal;
 import java.util.Locale;
 
 public class CalculatorScreen extends Screen {
-    private static final Identifier TEXTURE = Constants.id("textures/gui/calculator.png");
+    private static final ResourceLocation TEXTURE = Constants.id("textures/gui/calculator.png");
     private static final int GUI_WIDTH = 176;
     private static final int GUI_HEIGHT = 232;
     private static final int BUTTON_WIDTH = 31;
@@ -124,25 +120,27 @@ public class CalculatorScreen extends Screen {
     }
 
     @Override
-    public void extractBackground(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTick) {
-        super.extractBackground(graphics, mouseX, mouseY, partialTick);
-    }
-
-    @Override
-    public void extractRenderState(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTick) {
+    public void renderBackground(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
         int left = (this.width - GUI_WIDTH) / 2;
         int top = (this.height - GUI_HEIGHT) / 2;
 
-        graphics.blit(RenderPipelines.GUI_TEXTURED, TEXTURE, left, top, 0, 0, GUI_WIDTH, GUI_HEIGHT, GUI_WIDTH, GUI_HEIGHT);
+        super.renderBackground(guiGraphics, mouseX, mouseY, partialTick);
+        guiGraphics.blit(TEXTURE, left, top, 0, 0, GUI_WIDTH, GUI_HEIGHT, GUI_WIDTH, GUI_HEIGHT);
+    }
+
+    @Override
+    public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
+        super.render(graphics, mouseX, mouseY, partialTick);
+
+        int left = (this.width - GUI_WIDTH) / 2;
+        int top = (this.height - GUI_HEIGHT) / 2;
 
         String operationHint = pendingOperator == null ? Component.translatable("gui.craftulator.ready").getString() : formatValue(accumulator) + " " + operatorGlyph(pendingOperator);
-        graphics.text(this.font, operationHint, left + 22, top + 20, DISPLAY_HINT_TEXT, false);
+        graphics.drawString(this.font, operationHint, left + 22, top + 20, DISPLAY_HINT_TEXT, false);
 
         String visibleDisplay = fitDisplay(display, 137);
         int displayX = left + 156 - this.font.width(visibleDisplay);
-        graphics.text(this.font, visibleDisplay, displayX, top + 39, DISPLAY_TEXT, false);
-
-        super.extractRenderState(graphics, mouseX, mouseY, partialTick);
+        graphics.drawString(this.font, visibleDisplay, displayX, top + 39, DISPLAY_TEXT, false);
     }
 
     private String fitDisplay(String value, int availableWidth) {
@@ -168,13 +166,13 @@ public class CalculatorScreen extends Screen {
     }
 
     @Override
-    public boolean keyPressed(KeyEvent event) {
-        if (this.minecraft.options.keyInventory.matches(event)) {
+    public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
+        if (this.minecraft.options.keyInventory.matches(keyCode, scanCode)) {
             this.onClose();
             return true;
         }
 
-        return switch (event.key()) {
+        return switch (keyCode) {
             case GLFW.GLFW_KEY_ENTER, GLFW.GLFW_KEY_KP_ENTER -> {
                 playTone(ModSounds.EQUALS);
                 equals();
@@ -190,25 +188,19 @@ public class CalculatorScreen extends Screen {
                 clear();
                 yield true;
             }
-            default -> super.keyPressed(event);
+            default -> super.keyPressed(keyCode, scanCode, modifiers);
         };
     }
 
     @Override
-    public boolean charTyped(CharacterEvent event) {
-        String character = event.codepointAsString();
-        if (character.length() != 1) {
-            return super.charTyped(event);
-        }
-
-        char typed = character.charAt(0);
-        if (typed >= '0' && typed <= '9') {
-            playTone(ModSounds.digit(typed));
-            inputDigit(character);
+    public boolean charTyped(char codePoint, int modifiers) {
+        if (codePoint >= '0' && codePoint <= '9') {
+            playTone(ModSounds.digit(codePoint));
+            inputDigit(String.valueOf(codePoint));
             return true;
         }
 
-        return switch (typed) {
+        return switch (codePoint) {
             case '.', ',' -> {
                 playTone(ModSounds.DECIMAL);
                 inputDecimal();
@@ -249,7 +241,7 @@ public class CalculatorScreen extends Screen {
                 clear();
                 yield true;
             }
-            default -> super.charTyped(event);
+            default -> super.charTyped(codePoint, modifiers);
         };
     }
 
@@ -426,7 +418,40 @@ public class CalculatorScreen extends Screen {
         return scientific.replace("e+", "e").replaceAll("e(-?)0+", "e$1");
     }
 
-    private final class CalculatorButton extends AbstractButton {
+    private abstract class PressableWidget extends AbstractWidget {
+        private PressableWidget(int x, int y, int width, int height, Component message) {
+            super(x, y, width, height, message);
+        }
+
+        protected abstract void onPress();
+
+        @Override
+        public void onClick(double mouseX, double mouseY) {
+            this.onPress();
+        }
+
+        @Override
+        public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
+            if (!this.active || !this.visible) {
+                return false;
+            }
+
+            if (keyCode != GLFW.GLFW_KEY_SPACE && keyCode != GLFW.GLFW_KEY_ENTER && keyCode != GLFW.GLFW_KEY_KP_ENTER) {
+                return false;
+            }
+
+            this.playDownSound(Minecraft.getInstance().getSoundManager());
+            this.onPress();
+            return true;
+        }
+
+        @Override
+        protected void updateWidgetNarration(NarrationElementOutput output) {
+            this.defaultButtonNarrationText(output);
+        }
+    }
+
+    private final class CalculatorButton extends PressableWidget {
         private final int textColor;
         private final RegistryHandler.Sounds tone;
         private final Runnable action;
@@ -439,7 +464,7 @@ public class CalculatorScreen extends Screen {
         }
 
         @Override
-        public void onPress(InputWithModifiers input) {
+        public void onPress() {
             action.run();
         }
 
@@ -449,7 +474,7 @@ public class CalculatorScreen extends Screen {
         }
 
         @Override
-        protected void extractContents(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTick) {
+        protected void renderWidget(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
             if (this.isHovered()) {
                 graphics.fill(this.getX(), this.getY(), this.getRight(), this.getBottom(), 0x45FFFFFF);
             }
@@ -457,9 +482,9 @@ public class CalculatorScreen extends Screen {
             this.centeredText(graphics, CalculatorScreen.this.font, this.getMessage(), this.getX() + this.getWidth() / 2, this.getY() + (this.getHeight() - CalculatorScreen.this.font.lineHeight) / 2, this.textColor, false);
         }
 
-        public void centeredText(GuiGraphicsExtractor graphics, Font font, Component text, int x, int y, int color, boolean dropShadow) {
+        public void centeredText(GuiGraphics graphics, Font font, Component text, int x, int y, int color, boolean dropShadow) {
             FormattedCharSequence toRender = text.getVisualOrderText();
-            graphics.text(font, toRender, x - font.width(toRender) / 2 + 1, y + 1, color, dropShadow);
+            graphics.drawString(font, toRender, x - font.width(toRender) / 2 + 1, y + 1, color, dropShadow);
         }
 
         @Override
@@ -468,15 +493,14 @@ public class CalculatorScreen extends Screen {
         }
     }
 
-    /** Mutes and unmutes the keypad tones, drawn as a small extra key below the keypad. */
-    private final class SoundToggleButton extends AbstractButton {
+    private final class SoundToggleButton extends PressableWidget {
         private SoundToggleButton(int x, int y, int size) {
             super(x, y, size, size, Component.empty());
             refreshLabel();
         }
 
         @Override
-        public void onPress(InputWithModifiers input) {
+        public void onPress() {
             soundEnabled = !soundEnabled;
             refreshLabel();
 
@@ -497,7 +521,7 @@ public class CalculatorScreen extends Screen {
         }
 
         @Override
-        protected void extractContents(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float partialTick) {
+        protected void renderWidget(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
             int x = this.getX();
             int y = this.getY();
             int right = this.getRight();
@@ -515,7 +539,7 @@ public class CalculatorScreen extends Screen {
 
             Font font = CalculatorScreen.this.font;
             int color = soundEnabled ? NUMBER_TEXT : MUTED_TEXT;
-            graphics.text(font, NOTE_GLYPH, x + (this.getWidth() - font.width(NOTE_GLYPH)) / 2 + 1, y + (this.getHeight() - font.lineHeight) / 2 + 1, color, false);
+            graphics.drawString(font, NOTE_GLYPH, x + (this.getWidth() - font.width(NOTE_GLYPH)) / 2 + 1, y + (this.getHeight() - font.lineHeight) / 2 + 1, color, false);
 
             if (!soundEnabled) {
                 int middle = y + this.getHeight() / 2;

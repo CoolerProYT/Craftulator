@@ -6,7 +6,7 @@ import com.coolerpromc.craftulator.platform.services.client.IRegistryHelper;
 import com.coolerpromc.craftulator.platform.util.FabricClientPayloadContext;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
-import net.fabricmc.fabric.api.client.keymapping.v1.KeyMappingHelper;
+import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
@@ -29,13 +29,13 @@ public class FabricCraftulatorClient implements ClientModInitializer {
 
     private static final class FabricKeyMappingRegistrar implements IRegistryHelper.KeyMappingRegistrar {
         @Override
-        public void registerCategory(KeyMapping.Category category) {
-            KeyMapping.Category.register(category.id());
+        public void registerCategory(String category) {
+
         }
 
         @Override
         public void register(KeyMapping keyMapping) {
-            KeyMappingHelper.registerKeyMapping(keyMapping);
+            KeyBindingHelper.registerKeyBinding(keyMapping);
         }
     }
 }

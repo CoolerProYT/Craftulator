@@ -10,7 +10,6 @@ import java.util.List;
 
 public class NeoForgeRegistryHelper implements IRegistryHelper {
     private final List<ClientPayloadReceiverEntry<?>> clientPayloadReceivers = new ArrayList<>();
-    private final List<KeyMapping.Category> keyMappingCategories = new ArrayList<>();
     private final List<KeyMapping> keyMappings = new ArrayList<>();
 
     @Override
@@ -26,8 +25,8 @@ public class NeoForgeRegistryHelper implements IRegistryHelper {
     }
 
     @Override
-    public void registerKeyMappingCategory(KeyMapping.Category category) {
-        this.keyMappingCategories.add(category);
+    public void registerKeyMappingCategory(String category) {
+        // 1.21.1 categories are plain strings on the mapping itself, nothing to register.
     }
 
     @Override
@@ -37,10 +36,6 @@ public class NeoForgeRegistryHelper implements IRegistryHelper {
 
     @Override
     public void applyKeyMappingRegistrations(KeyMappingRegistrar registrar) {
-        for (KeyMapping.Category category : keyMappingCategories) {
-            registrar.registerCategory(category);
-        }
-
         for (KeyMapping keyMapping : keyMappings) {
             registrar.register(keyMapping);
         }

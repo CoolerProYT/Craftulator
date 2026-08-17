@@ -2,5 +2,5 @@
   "replace": false,
   "amount": 1,
   "order": 600,
-  "icon": "craftulator:slot/calculator"
+  "icon": "craftulator:gui/slot/calculator"
 }

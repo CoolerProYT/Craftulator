@@ -1,0 +1,7 @@
+{
+  "replace": false,
+  "amount": 1,
+  "order": 600,
+  "icon": "craftulator:gui/slot/calculator",
+  "operation": "set"
+}

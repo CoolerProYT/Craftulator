@@ -1,16 +1,34 @@
 plugins {
     id 'multiloader-loader'
-    id 'net.fabricmc.fabric-loom'
+    id 'fabric-loom'
     id "me.modmuss50.mod-publish-plugin"
+}
+
+repositories {
+    maven {
+        name = "Sleeping Town"
+        url = "https://repo.sleeping.town/"
+    }
+    maven {
+        name = "Ladysnake Libs"
+        url = 'https://maven.ladysnake.org/releases'
+    }
 }
 
 dependencies {
     minecraft("com.mojang:minecraft:${minecraft_version}")
-    implementation("net.fabricmc:fabric-loader:${fabric_loader_version}")
-    implementation("net.fabricmc.fabric-api:fabric-api:${fabric_version}")
+    mappings loom.layered {
+        officialMojangMappings()
+        parchment("org.parchmentmc.data:parchment-${parchment_minecraft}:${parchment_version}@zip")
+    }
+    modImplementation("net.fabricmc:fabric-loader:${fabric_loader_version}")
+    modImplementation("net.fabricmc.fabric-api:fabric-api:${fabric_version}")
 
-    compileOnly "eu.pb4:trinkets:${trinkets_version}"
-    runtimeOnly "eu.pb4:trinkets:${trinkets_version}"
+    modCompileOnly "dev.emi:trinkets:${trinkets_version}"
+    modRuntimeOnly "dev.emi:trinkets:${trinkets_version}"
+
+    modCompileOnly("io.wispforest:accessories-fabric:${accessories_version}")
+    modRuntimeOnly("io.wispforest:accessories-fabric:${accessories_version}")
 }
 
 loom {
@@ -54,7 +72,7 @@ sourceSets.configureEach {
 }
 
 publishMods {
-    file.set(jar.archiveFile)
+    file.set(remapJar.archiveFile)
     type = STABLE
     modLoaders.add("fabric")
     changelog = rootProject.file("changelog.md").text

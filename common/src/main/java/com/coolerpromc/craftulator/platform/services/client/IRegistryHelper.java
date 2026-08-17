@@ -12,12 +12,12 @@ public interface IRegistryHelper {
         <T extends HandledCustomPacketPayload> void register(CustomPacketPayload.Type<T> type);
     }
 
-    void registerKeyMappingCategory(KeyMapping.Category category);
+    void registerKeyMappingCategory(String category);
     void registerKeyMapping(KeyMapping keyMapping);
     void applyKeyMappingRegistrations(KeyMappingRegistrar registrar);
 
     interface KeyMappingRegistrar{
-        void registerCategory(KeyMapping.Category category);
+        void registerCategory(String category);
         void register(KeyMapping keyMapping);
     }
 }

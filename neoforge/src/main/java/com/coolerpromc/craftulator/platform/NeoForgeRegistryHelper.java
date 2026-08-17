@@ -31,13 +31,13 @@ public class NeoForgeRegistryHelper implements IRegistryHelper {
 
     @Override
     public <T extends Block> RegistryHandler.Blocks<T> registerBlock(String name, Function<BlockBehaviour.Properties, T> func, BlockBehaviour.Properties p) {
-        DeferredBlock<T> deferredBlock = BLOCKS.registerBlock(name, func, () -> p);
+        DeferredBlock<T> deferredBlock = BLOCKS.registerBlock(name, func, p);
         return () -> deferredBlock;
     }
 
     @Override
     public <T extends Item> RegistryHandler.Items<T> registerItem(String name, Function<Item.Properties, T> func, Item.Properties p) {
-        DeferredItem<T> deferredItem = ITEMS.registerItem(name, func, () -> p);
+        DeferredItem<T> deferredItem = ITEMS.registerItem(name, func, p);
         return () -> deferredItem;
     }
 

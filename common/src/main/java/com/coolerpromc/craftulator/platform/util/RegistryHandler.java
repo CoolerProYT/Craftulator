@@ -2,17 +2,16 @@ package com.coolerpromc.craftulator.platform.util;
 
 import net.minecraft.core.Holder;
 import net.minecraft.core.component.DataComponentType;
-import net.minecraft.resources.Identifier;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.ItemStackTemplate;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Block;
-import org.jspecify.annotations.NonNull;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Supplier;
 
@@ -23,8 +22,8 @@ public interface RegistryHandler<R, T extends R> extends Supplier<T> {
         return holder().unwrapKey().orElse(null);
     }
 
-    default Identifier id(){
-        return key().identifier();
+    default ResourceLocation id(){
+        return key().location();
     }
 
     @Override
@@ -34,31 +33,23 @@ public interface RegistryHandler<R, T extends R> extends Supplier<T> {
 
     interface Items<I extends Item> extends RegistryHandler<Item, I>, ItemLike {
         @Override
-        default @NonNull Item asItem(){
+        default @NotNull Item asItem(){
             return get();
         }
 
         default ItemStack toStack(){
-            return toTemplate().create();
-        }
-
-        default ItemStackTemplate toTemplate(){
-            return new ItemStackTemplate(asItem());
+            return asItem().getDefaultInstance();
         }
     }
 
     interface Blocks<B extends Block> extends RegistryHandler<Block, B>, ItemLike{
         @Override
-        default @NonNull Item asItem(){
+        default @NotNull Item asItem(){
             return get().asItem();
         }
 
         default ItemStack toStack(){
-            return toTemplate().create();
-        }
-
-        default ItemStackTemplate toTemplate(){
-            return new ItemStackTemplate(asItem());
+            return asItem().getDefaultInstance();
         }
     }
 

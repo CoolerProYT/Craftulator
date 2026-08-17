@@ -12,7 +12,7 @@ import net.minecraft.world.InteractionHand;
 import org.lwjgl.glfw.GLFW;
 
 public class ModKeyMappings {
-    public static final KeyMapping.Category CATEGORY = registerCategory("craftulator");
+    public static final String CATEGORY = registerCategory("craftulator");
 
     public static final KeyMapping OPEN_CALCULATOR = register("open_calculator", GLFW.GLFW_KEY_C);
 
@@ -33,11 +33,8 @@ public class ModKeyMappings {
         }
     }
 
-    private static KeyMapping.Category registerCategory(String name) {
-        KeyMapping.Category category = new KeyMapping.Category(Constants.id(name));
-        ServicesClient.REGISTRY.registerKeyMappingCategory(category);
-
-        return category;
+    private static String registerCategory(String name) {
+        return "key.categories." + name;
     }
 
     private static KeyMapping register(String name, int defaultKey) {

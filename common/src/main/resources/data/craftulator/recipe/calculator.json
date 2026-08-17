@@ -2,10 +2,18 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "key": {
-    "G": "minecraft:glass_pane",
-    "B": "minecraft:stone_button",
-    "I": "minecraft:iron_ingot",
-    "N": "minecraft:note_block"
+    "G": {
+      "item": "minecraft:glass_pane"
+    },
+    "B": {
+      "item": "minecraft:stone_button"
+    },
+    "I": {
+      "item": "minecraft:iron_ingot"
+    },
+    "N": {
+      "item": "minecraft:note_block"
+    }
   },
   "pattern": [
     "GGG",
@@ -13,6 +21,7 @@
     "INI"
   ],
   "result": {
+    "count": 1,
     "id": "craftulator:calculator"
   }
 }
