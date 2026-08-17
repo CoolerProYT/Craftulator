@@ -1,0 +1,82 @@
+{
+  "calculator.digit.0": {
+    "subtitle": "subtitles.craftulator.calculator.tone",
+    "sounds": ["craftulator:zero"]
+  },
+  "calculator.digit.1": {
+    "subtitle": "subtitles.craftulator.calculator.tone",
+    "sounds": ["craftulator:one"]
+  },
+  "calculator.digit.2": {
+    "subtitle": "subtitles.craftulator.calculator.tone",
+    "sounds": ["craftulator:two"]
+  },
+  "calculator.digit.3": {
+    "subtitle": "subtitles.craftulator.calculator.tone",
+    "sounds": ["craftulator:three"]
+  },
+  "calculator.digit.4": {
+    "subtitle": "subtitles.craftulator.calculator.tone",
+    "sounds": ["craftulator:four"]
+  },
+  "calculator.digit.5": {
+    "subtitle": "subtitles.craftulator.calculator.tone",
+    "sounds": ["craftulator:five"]
+  },
+  "calculator.digit.6": {
+    "subtitle": "subtitles.craftulator.calculator.tone",
+    "sounds": ["craftulator:six"]
+  },
+  "calculator.digit.7": {
+    "subtitle": "subtitles.craftulator.calculator.tone",
+    "sounds": ["craftulator:seven"]
+  },
+  "calculator.digit.8": {
+    "subtitle": "subtitles.craftulator.calculator.tone",
+    "sounds": ["craftulator:eight"]
+  },
+  "calculator.digit.9": {
+    "subtitle": "subtitles.craftulator.calculator.tone",
+    "sounds": ["craftulator:nine"]
+  },
+  "calculator.decimal": {
+    "subtitle": "subtitles.craftulator.calculator.tone",
+    "sounds": ["craftulator:decimal"]
+  },
+  "calculator.sign": {
+    "subtitle": "subtitles.craftulator.calculator.tone",
+    "sounds": ["craftulator:sign"]
+  },
+  "calculator.percent": {
+    "subtitle": "subtitles.craftulator.calculator.tone",
+    "sounds": ["craftulator:percent"]
+  },
+  "calculator.backspace": {
+    "subtitle": "subtitles.craftulator.calculator.tone",
+    "sounds": ["craftulator:backspace"]
+  },
+  "calculator.plus": {
+    "subtitle": "subtitles.craftulator.calculator.tone",
+    "sounds": ["craftulator:plus"]
+  },
+  "calculator.minus": {
+    "subtitle": "subtitles.craftulator.calculator.tone",
+    "sounds": ["craftulator:minus"]
+  },
+  "calculator.multiply": {
+    "subtitle": "subtitles.craftulator.calculator.tone",
+    "sounds": ["craftulator:multiply"]
+  },
+  "calculator.divide": {
+    "subtitle": "subtitles.craftulator.calculator.tone",
+    "sounds": ["craftulator:divide"]
+  },
+  "calculator.equals": {
+    "subtitle": "subtitles.craftulator.calculator.equals",
+    "sounds": ["craftulator:equals"]
+  },
+  "calculator.clear": {
+    "subtitle": "subtitles.craftulator.calculator.clear",
+    "sounds": ["craftulator:clear"]
+  }
+}

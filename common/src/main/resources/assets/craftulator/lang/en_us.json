@@ -1,0 +1,17 @@
+{
+  "item.craftulator.calculator": "Calculator",
+  "gui.craftulator.calculator": "Calculator",
+  "trinkets.slots.leg.calculator": "Calculator",
+  "gui.craftulator.calculator.narration": "Calculator display: %s",
+  "gui.craftulator.ready": "READY",
+  "gui.craftulator.error": "Error",
+  "gui.craftulator.sound.on": "Sound: On",
+  "gui.craftulator.sound.off": "Sound: Off",
+  "curios.identifier.calculator": "Calculator",
+  "trinkets.slot.legs.calculator": "Calculator",
+  "key.category.craftulator.craftulator": "Craftulator",
+  "key.craftulator.open_calculator": "Open Calculator",
+  "subtitles.craftulator.calculator.tone": "Calculator chirps",
+  "subtitles.craftulator.calculator.equals": "Calculator chimes",
+  "subtitles.craftulator.calculator.clear": "Calculator resets"
+}
