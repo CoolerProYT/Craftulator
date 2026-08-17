@@ -14,7 +14,7 @@ public record ClientBoundOpenCalculatorPayload() implements HandledCustomPacketP
 
     @Override
     public void handle(PayloadContext context) {
-        context.execute(() -> Minecraft.getInstance().gui.setScreen(new CalculatorScreen()));
+        context.execute(() -> Minecraft.getInstance().setScreen(new CalculatorScreen()));
     }
 
     @Override

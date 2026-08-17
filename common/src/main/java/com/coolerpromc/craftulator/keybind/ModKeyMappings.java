@@ -19,15 +19,15 @@ public class ModKeyMappings {
     public static void handleInput(Minecraft minecraft) {
         while (OPEN_CALCULATOR.consumeClick()) {
             if (minecraft.player.getItemInHand(InteractionHand.MAIN_HAND).is(ModItems.CALCULATOR.holder())){
-                minecraft.gui.setScreen(new CalculatorScreen());
+                minecraft.setScreen(new CalculatorScreen());
                 return;
             }
             if (minecraft.player.getItemInHand(InteractionHand.OFF_HAND).is(ModItems.CALCULATOR.holder())){
-                minecraft.gui.setScreen(new CalculatorScreen());
+                minecraft.setScreen(new CalculatorScreen());
                 return;
             }
             if (Services.COMPAT.isWearing(minecraft.player, ModItems.CALCULATOR)){
-                minecraft.gui.setScreen(new CalculatorScreen());
+                minecraft.setScreen(new CalculatorScreen());
                 return;
             }
         }
