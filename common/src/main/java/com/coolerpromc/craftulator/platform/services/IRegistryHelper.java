@@ -1,12 +1,8 @@
 package com.coolerpromc.craftulator.platform.services;
 
 import com.coolerpromc.craftulator.Constants;
-import com.coolerpromc.craftulator.network.HandledCustomPacketPayload;
 import com.coolerpromc.craftulator.platform.util.RegistryHandler;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.network.RegistryFriendlyByteBuf;
-import net.minecraft.network.codec.StreamCodec;
-import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.item.Item;
@@ -36,12 +32,5 @@ public interface IRegistryHelper {
     }
     static ResourceKey<SoundEvent> soundEventKey(String name) {
         return ResourceKey.create(Registries.SOUND_EVENT, Constants.id(name));
-    }
-
-    <T extends HandledCustomPacketPayload> void registerClientboundPayload(CustomPacketPayload.Type<T> type, StreamCodec<? super RegistryFriendlyByteBuf, T> streamCodec);
-    void applyClientboundPayloadRegistrations(ClientboundPayloadRegistrar registrar);
-
-    interface ClientboundPayloadRegistrar {
-        <T extends HandledCustomPacketPayload> void register(CustomPacketPayload.Type<T> type, StreamCodec<? super RegistryFriendlyByteBuf, T> streamCodec);
     }
 }

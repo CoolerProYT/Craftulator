@@ -1,6 +1,6 @@
 package com.coolerpromc.craftulator;
 
-import com.coolerpromc.craftulator.network.HandledCustomPacketPayload;
+import com.coolerpromc.craftulator.network.ClientBoundOpenCalculatorPacket;
 import com.coolerpromc.craftulator.platform.ServicesClient;
 import com.coolerpromc.craftulator.platform.services.client.IRegistryHelper;
 import com.coolerpromc.craftulator.platform.util.FabricClientPayloadContext;
@@ -9,28 +9,24 @@ import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;
 import net.minecraft.client.KeyMapping;
-import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 
 public class FabricCraftulatorClient implements ClientModInitializer {
     @Override
     public void onInitializeClient() {
         CraftulatorClient.init();
-        CraftulatorClient.initClientPayloadHandler();
 
-        ServicesClient.REGISTRY.applyClientPayloadReceiverRegistrations(FabricCraftulatorClient::registerPayloadReceiver);
+        ClientPlayNetworking.registerGlobalReceiver(ClientBoundOpenCalculatorPacket.TYPE, (client, handler, buf, sender) ->
+                ClientBoundOpenCalculatorPacket.decode(buf).handle(new FabricClientPayloadContext(client, handler)));
+
         ServicesClient.REGISTRY.applyKeyMappingRegistrations(new FabricKeyMappingRegistrar());
 
         ClientTickEvents.END_CLIENT_TICK.register(CraftulatorClient::onEndClientTick);
     }
 
-    private static <T extends HandledCustomPacketPayload> void registerPayloadReceiver(CustomPacketPayload.Type<T> type) {
-        ClientPlayNetworking.registerGlobalReceiver(type, (payload, context) -> payload.handle(new FabricClientPayloadContext(context)));
-    }
-
     private static final class FabricKeyMappingRegistrar implements IRegistryHelper.KeyMappingRegistrar {
         @Override
         public void registerCategory(String category) {
-
+            // Categories are plain strings on the mapping itself, nothing to register.
         }
 
         @Override

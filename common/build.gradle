@@ -1,27 +1,26 @@
 plugins {
     id 'multiloader-common'
-    id 'net.neoforged.moddev'
+    id 'net.neoforged.moddev.legacyforge'
 }
 
-neoForge {
-    neoFormVersion = neo_form_version
+legacyForge {
+    mcpVersion = minecraft_version
     // Automatically enable AccessTransformers if the file exists
-    def at = file('src/main/resources/META-INF/accesstransformer.cfg')
-    if (at.exists()) {
-        accessTransformers.from(at.absolutePath)
+    if (file('src/main/resources/META-INF/accesstransformer.cfg').exists()) {
+        accessTransformers = ['src/main/resources/META-INF/accesstransformer.cfg']
     }
     parchment {
         minecraftVersion = parchment_minecraft
         mappingsVersion = parchment_version
     }
-
 }
 
 dependencies {
-    compileOnly('net.fabricmc:sponge-mixin:0.17.3+mixin.0.8.7')
-    compileOnly(annotationProcessor('io.github.llamalad7:mixinextras-common:0.5.3'))
+    compileOnly "org.spongepowered:mixin:0.8.5"
+    implementation "com.google.code.findbugs:jsr305:3.0.1"
 
-    compileOnly("io.wispforest:accessories-common:${accessories_version}-mojmap")
+    // Accessory mods are optional; only the API is needed to compile against.
+    compileOnly "io.wispforest:accessories-common:${accessories_version}-mojmap"
 }
 
 configurations {
@@ -38,23 +37,4 @@ configurations {
 artifacts {
     commonJava sourceSets.main.java.sourceDirectories.singleFile
     commonResources sourceSets.main.resources.sourceDirectories.singleFile
-}
-
-// Implement mcgradleconventions loader attribute
-def loaderAttribute = Attribute.of('io.github.mcgradleconventions.loader', String)
-['apiElements', 'runtimeElements', 'sourcesElements', 'javadocElements'].each { variant ->
-    configurations.named(variant) {
-        attributes {
-            attribute(loaderAttribute, 'common')
-        }
-    }
-}
-sourceSets.configureEach {
-    [it.compileClasspathConfigurationName, it.runtimeClasspathConfigurationName].each { variant->
-        configurations.named(variant) {
-            attributes {
-                attribute(loaderAttribute, 'common')
-            }
-        }
-    }
 }

@@ -1,0 +1,5 @@
+{
+  "order": 600,
+  "icon": "craftulator:gui/slot/calculator",
+  "validators": ["curios:tag"]
+}

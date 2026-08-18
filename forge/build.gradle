@@ -1,0 +1,97 @@
+plugins {
+    id 'multiloader-loader'
+    id 'net.neoforged.moddev.legacyforge'
+    id "me.modmuss50.mod-publish-plugin"
+}
+
+repositories {
+    maven { url "https://maven.shedaniel.me/" }
+}
+
+legacyForge {
+    version = "${minecraft_version}-${forge_version}"
+
+    // Left off: strict validation rejects entries in Forge's own bundled AT file.
+
+    // Automatically enable forge AccessTransformers if the file exists
+    def at = project(':common').file('src/main/resources/META-INF/accesstransformer.cfg')
+    if (at.exists()) {
+        accessTransformers.from(at.absolutePath)
+    }
+    parchment {
+        minecraftVersion = parchment_minecraft
+        mappingsVersion = parchment_version
+    }
+    runs {
+        configureEach {
+            systemProperty('forge.enabledGameTestNamespaces', mod_id)
+            ideName = "Forge ${it.name.capitalize()} (${project.path})" // Unify the run config names with fabric
+        }
+        client {
+            client()
+            gameDirectory = this.mkdir(this.file('runs/client'))
+        }
+        data {
+            data()
+            gameDirectory = this.mkdir(this.file('runs/data'))
+            programArguments.addAll '--mod', project.mod_id, '--all', '--output', file('src/generated/resources/').getAbsolutePath(), '--existing', file('src/main/resources/').getAbsolutePath()
+        }
+        server {
+            server()
+            gameDirectory = this.mkdir(this.file('runs/server'))
+        }
+    }
+    mods {
+        "${mod_id}" {
+            sourceSet sourceSets.main
+        }
+    }
+}
+
+dependencies {
+    compileOnly project(":common")
+    annotationProcessor("org.spongepowered:mixin:0.8.5-SNAPSHOT:processor")
+
+    compileOnly "org.jetbrains:annotations:24.1.0"
+    compileOnly "com.google.code.findbugs:jsr305:3.0.1"
+
+    modCompileOnly("top.theillusivec4.curios:curios-forge:${curios_version}:api")
+    modRuntimeOnly("top.theillusivec4.curios:curios-forge:${curios_version}")
+
+    modRuntimeOnly("me.shedaniel.cloth:cloth-config-forge:11.1.136")
+    modCompileOnly("io.wispforest:accessories-neoforge:${accessories_version}")
+    modRuntimeOnly("io.wispforest:accessories-neoforge:${accessories_version}")
+}
+
+sourceSets.main.resources { srcDir 'src/generated/resources' }
+
+jar {
+    finalizedBy('reobfJar')
+    manifest.attributes([
+            "MixinConfigs": "${mod_id}.mixins.json,${mod_id}.forge.mixins.json"
+    ])
+}
+
+tasks.publishMods.dependsOn(tasks.reobfJar)
+
+publishMods {
+    file.set(jar.archiveFile)
+    type = STABLE
+    modLoaders.add("forge")
+    changelog = rootProject.file("changelog.md").text
+    displayName = mod_id + "-" + project.version + "+" + minecraft_version + "-forge"
+
+    curseforge {
+        projectId = "1656564"
+        accessToken = findProperty("CF_TOKEN")
+        minecraftVersions.add(minecraft_version)
+        client = true
+        server = true
+    }
+
+    modrinth {
+        projectId = 'SxtT2MNR'
+        accessToken = findProperty("MODRINTH_TOKEN")
+        minecraftVersions.add(minecraft_version)
+    }
+}

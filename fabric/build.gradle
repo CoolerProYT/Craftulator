@@ -13,6 +13,11 @@ repositories {
         name = "Ladysnake Libs"
         url = 'https://maven.ladysnake.org/releases'
     }
+    maven {
+        // Cloth Config, pulled in transitively by Accessories
+        name = "Shedaniel"
+        url = 'https://maven.shedaniel.me/'
+    }
 }
 
 dependencies {
@@ -25,7 +30,6 @@ dependencies {
     modImplementation("net.fabricmc.fabric-api:fabric-api:${fabric_version}")
 
     modCompileOnly "dev.emi:trinkets:${trinkets_version}"
-    modRuntimeOnly "dev.emi:trinkets:${trinkets_version}"
 
     modCompileOnly("io.wispforest:accessories-fabric:${accessories_version}")
     modRuntimeOnly("io.wispforest:accessories-fabric:${accessories_version}")
@@ -48,25 +52,6 @@ loom {
             setConfigName('Fabric Server')
             ideConfigGenerated(true)
             runDir('runs/server')
-        }
-    }
-}
-
-// Implement mcgradleconventions loader attribute
-def loaderAttribute = Attribute.of('io.github.mcgradleconventions.loader', String)
-['apiElements', 'runtimeElements', 'sourcesElements', 'javadocElements', 'includeInternal', 'modCompileClasspath'].each { variant ->
-    configurations.named(variant) {
-        attributes {
-            attribute(loaderAttribute, 'fabric')
-        }
-    }
-}
-sourceSets.configureEach {
-    [it.compileClasspathConfigurationName, it.runtimeClasspathConfigurationName].each { variant->
-        configurations.named(variant) {
-            attributes {
-                attribute(loaderAttribute, 'fabric')
-            }
         }
     }
 }

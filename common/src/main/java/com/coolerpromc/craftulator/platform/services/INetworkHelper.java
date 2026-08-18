@@ -1,9 +1,9 @@
 package com.coolerpromc.craftulator.platform.services;
 
-import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
+import com.coolerpromc.craftulator.network.CustomPacket;
 import net.minecraft.server.level.ServerPlayer;
 
 public interface INetworkHelper {
-    <T extends CustomPacketPayload> void sendToPlayer(ServerPlayer player, T packet);
-    <T extends CustomPacketPayload> void sendToServer(T packet);
+    <T extends CustomPacket> void sendToPlayer(ServerPlayer player, T packet);
+    <T extends CustomPacket> void sendToServer(T packet);
 }

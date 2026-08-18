@@ -120,16 +120,17 @@ public class CalculatorScreen extends Screen {
     }
 
     @Override
-    public void renderBackground(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
+    public void renderBackground(GuiGraphics guiGraphics) {
         int left = (this.width - GUI_WIDTH) / 2;
         int top = (this.height - GUI_HEIGHT) / 2;
 
-        super.renderBackground(guiGraphics, mouseX, mouseY, partialTick);
+        super.renderBackground(guiGraphics);
         guiGraphics.blit(TEXTURE, left, top, 0, 0, GUI_WIDTH, GUI_HEIGHT, GUI_WIDTH, GUI_HEIGHT);
     }
 
     @Override
     public void render(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
+        this.renderBackground(graphics);
         super.render(graphics, mouseX, mouseY, partialTick);
 
         int left = (this.width - GUI_WIDTH) / 2;
@@ -476,7 +477,7 @@ public class CalculatorScreen extends Screen {
         @Override
         protected void renderWidget(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
             if (this.isHovered()) {
-                graphics.fill(this.getX(), this.getY(), this.getRight(), this.getBottom(), 0x45FFFFFF);
+                graphics.fill(this.getX(), this.getY(), this.getX() + this.getWidth(), this.getY() + this.getHeight(), 0x45FFFFFF);
             }
 
             this.centeredText(graphics, CalculatorScreen.this.font, this.getMessage(), this.getX() + this.getWidth() / 2, this.getY() + (this.getHeight() - CalculatorScreen.this.font.lineHeight) / 2, this.textColor, false);
@@ -524,8 +525,8 @@ public class CalculatorScreen extends Screen {
         protected void renderWidget(GuiGraphics graphics, int mouseX, int mouseY, float partialTick) {
             int x = this.getX();
             int y = this.getY();
-            int right = this.getRight();
-            int bottom = this.getBottom();
+            int right = this.getX() + this.getWidth();
+            int bottom = this.getY() + this.getHeight();
 
             graphics.fill(x, y, right, bottom, KEY_FACE);
             graphics.fill(x, y, right, y + 1, KEY_HIGHLIGHT);

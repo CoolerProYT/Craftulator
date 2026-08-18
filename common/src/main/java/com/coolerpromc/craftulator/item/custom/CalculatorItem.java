@@ -1,6 +1,6 @@
 package com.coolerpromc.craftulator.item.custom;
 
-import com.coolerpromc.craftulator.network.ClientBoundOpenCalculatorPayload;
+import com.coolerpromc.craftulator.network.ClientBoundOpenCalculatorPacket;
 import com.coolerpromc.craftulator.platform.Services;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.InteractionHand;
@@ -18,7 +18,7 @@ public class CalculatorItem extends Item {
     @Override
     public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
         if (player instanceof ServerPlayer serverPlayer){
-            Services.NETWORK.sendToPlayer(serverPlayer, new ClientBoundOpenCalculatorPayload());
+            Services.NETWORK.sendToPlayer(serverPlayer, new ClientBoundOpenCalculatorPacket());
         }
 
         return InteractionResultHolder.success(player.getItemInHand(hand));

@@ -1,7 +1,6 @@
 package com.coolerpromc.craftulator.platform.util;
 
 import net.minecraft.core.Holder;
-import net.minecraft.core.component.DataComponentType;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.sounds.SoundEvent;
@@ -11,7 +10,6 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Block;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Supplier;
 
@@ -33,7 +31,7 @@ public interface RegistryHandler<R, T extends R> extends Supplier<T> {
 
     interface Items<I extends Item> extends RegistryHandler<Item, I>, ItemLike {
         @Override
-        default @NotNull Item asItem(){
+        default Item asItem(){
             return get();
         }
 
@@ -44,7 +42,7 @@ public interface RegistryHandler<R, T extends R> extends Supplier<T> {
 
     interface Blocks<B extends Block> extends RegistryHandler<Block, B>, ItemLike{
         @Override
-        default @NotNull Item asItem(){
+        default Item asItem(){
             return get().asItem();
         }
 
@@ -59,6 +57,4 @@ public interface RegistryHandler<R, T extends R> extends Supplier<T> {
     interface Sounds extends RegistryHandler<SoundEvent, SoundEvent>{
     }
 
-    interface Components<T> extends RegistryHandler<DataComponentType<?>, DataComponentType<T>>{
-    }
 }
