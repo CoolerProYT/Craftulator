@@ -3,6 +3,7 @@ package com.coolerpromc.craftulator.screen;
 import com.coolerpromc.craftulator.Constants;
 import com.coolerpromc.craftulator.platform.util.RegistryHandler;
 import com.coolerpromc.craftulator.sound.ModSounds;
+import com.mojang.blaze3d.platform.InputConstants;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
@@ -20,7 +21,6 @@ import net.minecraft.client.sounds.SoundManager;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.Identifier;
 import net.minecraft.util.FormattedCharSequence;
-import org.lwjgl.glfw.GLFW;
 
 import java.math.BigDecimal;
 import java.util.Locale;
@@ -175,17 +175,17 @@ public class CalculatorScreen extends Screen {
         }
 
         return switch (event.key()) {
-            case GLFW.GLFW_KEY_ENTER, GLFW.GLFW_KEY_KP_ENTER -> {
+            case InputConstants.KEY_RETURN, InputConstants.KEY_NUMPADENTER -> {
                 playTone(ModSounds.EQUALS);
                 equals();
                 yield true;
             }
-            case GLFW.GLFW_KEY_BACKSPACE -> {
+            case InputConstants.KEY_BACKSPACE -> {
                 playTone(ModSounds.BACKSPACE);
                 backspace();
                 yield true;
             }
-            case GLFW.GLFW_KEY_DELETE -> {
+            case InputConstants.KEY_DELETE -> {
                 playTone(ModSounds.CLEAR);
                 clear();
                 yield true;

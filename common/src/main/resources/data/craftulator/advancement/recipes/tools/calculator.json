@@ -13,7 +13,7 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "craftulator:calculator"
+        "recipes": "craftulator:calculator"
       },
       "trigger": "minecraft:recipe_unlocked"
     }

@@ -9,6 +9,14 @@ repositories {
         name = "Illusive Soulworks maven"
         url = "https://maven.theillusivec4.top/"
     }
+    maven {
+        name "coolerpromcMavenPrivate"
+        url "https://maven.coolerpromc.com/private"
+        credentials {
+            username = findProperty("maven_username")
+            password = findProperty("maven_password")
+        }
+    }
 }
 
 neoForge {
@@ -49,10 +57,10 @@ neoForge {
 
 dependencies {
     compileOnly "top.theillusivec4.curios:curios-neoforge:${curios_version}:api"
-    runtimeOnly "top.theillusivec4.curios:curios-neoforge:${curios_version}"
+//    runtimeOnly "top.theillusivec4.curios:curios-neoforge:${curios_version}"
 
     compileOnly "eu.pb4:trinkets:${trinkets_version}"
-    runtimeOnly "eu.pb4:trinkets:${trinkets_version}"
+//    runtimeOnly "eu.pb4:trinkets:${trinkets_version}"
 }
 
 sourceSets.main.resources { srcDir 'src/generated/resources' }

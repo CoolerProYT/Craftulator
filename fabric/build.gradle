@@ -10,7 +10,7 @@ dependencies {
     implementation("net.fabricmc.fabric-api:fabric-api:${fabric_version}")
 
     compileOnly "eu.pb4:trinkets:${trinkets_version}"
-    runtimeOnly "eu.pb4:trinkets:${trinkets_version}"
+//    runtimeOnly "eu.pb4:trinkets:${trinkets_version}"
 }
 
 loom {

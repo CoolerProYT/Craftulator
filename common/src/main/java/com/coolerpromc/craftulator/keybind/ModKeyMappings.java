@@ -9,12 +9,11 @@ import com.mojang.blaze3d.platform.InputConstants;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.world.InteractionHand;
-import org.lwjgl.glfw.GLFW;
 
 public class ModKeyMappings {
     public static final KeyMapping.Category CATEGORY = registerCategory("craftulator");
 
-    public static final KeyMapping OPEN_CALCULATOR = register("open_calculator", GLFW.GLFW_KEY_C);
+    public static final KeyMapping OPEN_CALCULATOR = register("open_calculator", InputConstants.KEY_C);
 
     public static void handleInput(Minecraft minecraft) {
         while (OPEN_CALCULATOR.consumeClick()) {
@@ -41,7 +40,7 @@ public class ModKeyMappings {
     }
 
     private static KeyMapping register(String name, int defaultKey) {
-        KeyMapping keyMapping = new KeyMapping("key." + Constants.MODID + "." + name, InputConstants.Type.KEYSYM, defaultKey, CATEGORY);
+        KeyMapping keyMapping = new KeyMapping("key." + Constants.MODID + "." + name, InputConstants.Type.KEYBOARD, defaultKey, CATEGORY);
         ServicesClient.REGISTRY.registerKeyMapping(keyMapping);
 
         return keyMapping;
